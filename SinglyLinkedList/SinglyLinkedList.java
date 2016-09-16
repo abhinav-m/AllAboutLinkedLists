@@ -199,6 +199,109 @@ class LinkedList
     }
 
 
+    /*PROBLEM STATEMENT:
+    Find the middle of the linked list in O(n) time.
+    The solution to the problem is relatively simple.
+    If we apply brute force method, the problem can be solved in O(m)+O(n) m=n/2
+    ie,O(n) for traversing the list and O(m) for traversing to the middle once it's found.
+    However, a better solution involves running two parallel pointers at double speed which automatically gives us the middle of the linked list in O(n) time.
+    A common issue which arises is running both the pointers simultaneously which can give ambiguous results when the size of the linked list is unknown (odd or even).
+    Pointing an element to the next of next element can also be used to determine if the linked list has odd or even number of elements.
+     */
+    public int middleOfList()
+    {
+        Node speedOneNode,speedTwoNode;
+        speedOneNode = speedTwoNode = start;
+        int i=0,counter=1;
+        if(this.isEmpty())
+            return 0;
+        else if(start.getNext()==null)
+            return 1;
+        else {
+            while (speedTwoNode.getNext() != null) {
+                //SpeedTwoNode always gets increased by one pointer,ie the hare
+                if (i == 0) {
+                    speedTwoNode = speedTwoNode.getNext();
+                    i = 1;
+                }
+                //speedOneNode gets incremented by one pointer alternatively thus the tortoise "moving slowly"
+                //also increment counter here to get the position of the middle element.
+                else if (i == 1) {
+                    speedTwoNode = speedTwoNode.getNext();
+                    speedOneNode = speedOneNode.getNext();
+                    counter++;
+                    i = 0;
+                }
+
+
+            }
+        }
+
+        System.out.println("Middle of the linked list = "+counter);
+        return speedOneNode.getInfo();
+
+    }
+
+    /*PROBLEM STATEMENT:
+    Find out whether the given linked list has even number of elements or
+    odd number of elements.
+     */
+    public boolean isListEven()
+    {
+        Node curNode = start;
+        while(curNode!=null&&curNode.getNext()!=null)
+            curNode = curNode.getNext().getNext();
+        if(curNode==null) {
+            System.out.println("\nList is even");
+            return true;
+        }
+        else {
+            System.out.println("\nList is odd");
+            return false;
+        }
+    }
+
+    /*PROBLEM STATEMENT:
+    Reverse the  linked list iteratively.
+    This one requires 3 nodes to solve the problem ie, the current node the next node and the previous node.
+    Current node is initialised to start node in the beginning, previous node is null( as the list is being reversed)
+    As we traverse through the list, WE GET THE VALUE OF THE NEXT NODE FIRST (this is so as to not break the chain)
+    then we initialise the previous node (as next to the current node) (Reversing) then interchange the current node
+    to be the previous node , and the next node to be the current node.
+    Time complexity O(n) to traverse through the list O(1) extra space.
+     */
+    public void reverseListIter()
+    {
+        Node curNode,nextNode,prevNode;
+        //Initially current node will be the first node,
+        //previous node (will be null because list is being reversed)
+        //next node will be the next node to start.
+        curNode = start;
+        prevNode = null;
+        while(curNode!=null)
+        {
+            nextNode = curNode.getNext();
+            curNode.setNext(prevNode);
+            prevNode = curNode;
+            curNode = nextNode;
+
+        }
+        start = prevNode;
+    }
+    /*PROBLEM STATEMENT:
+    Reverse the  linked list recursively TBD.
+    */
+    public Node recursiveReverse(Node curNode)
+    {
+       if(curNode.getNext()==null) {
+           curNode = start;
+           return curNode;
+       }
+else
+       curNode.setNext( recursiveReverse(curNode.getNext()));
+        return curNode;
+
+    }
 }
 
 
@@ -218,8 +321,13 @@ public class SinglyLinkedList {
         list.printList();
         list.delete();
         list.printList();
-        list.delete(1);
+        list.add(6);
+        list.add(7);
         list.printList();
+        list.isListEven();
+        list.reverseListIter();
+        list.printList();
+        System.out.println("Data at middle ="+list.middleOfList());
 
     }
 }
