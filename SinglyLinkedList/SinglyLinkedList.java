@@ -293,14 +293,48 @@ class LinkedList
     */
     public Node recursiveReverse(Node curNode)
     {
-       if(curNode.getNext()==null) {
-           curNode = start;
-           return curNode;
-       }
-else
-       curNode.setNext( recursiveReverse(curNode.getNext()));
-        return curNode;
+        //Base case where our recursion should return the last node
+        //ie, the new head.
+      if(curNode.getNext()==null)
+          return curNode;
+        //The last node here will be the new head returned by our function.
+        Node newHead = recursiveReverse(curNode.getNext());
+        curNode.getNext().setNext(curNode);
+        //Break the current chain or list will become doubly linked.
+        curNode.setNext(null);
+        return newHead;
 
+    }
+    /*PROBLEM STATEMENT:
+    In a singly linked list, print out the nth node from the end.
+    Time complexity O(n) (One scan)
+     */
+
+    public int nthNodeFromEnd(int n)
+    {
+        int counter=1;
+        if(n>this.size) {
+            System.out.println("Cant find " + n + "th node from the end in a list less than size" + n);
+            return 0;
+        }
+        if(this.isEmpty())
+            return 0;
+        Node curNode = start;
+        Node nthNode = start;
+        while(curNode.getNext()!=null)
+        {
+            if(counter == n)
+            {
+            curNode = curNode.next;
+            nthNode = nthNode.next;
+            }
+            else
+            {
+                counter++;
+                curNode = curNode.next;
+            }
+        }
+        return nthNode.info;
     }
 }
 
@@ -326,6 +360,11 @@ public class SinglyLinkedList {
         list.printList();
         list.isListEven();
         list.reverseListIter();
+        System.out.print("\nFirst reversal");
+        list.printList();
+        System.out.println("3rd node from the end is"+list.nthNodeFromEnd(3));
+        list.start = list.recursiveReverse(list.start);
+        System.out.print("\nSecond reversal");
         list.printList();
         System.out.println("Data at middle ="+list.middleOfList());
 
