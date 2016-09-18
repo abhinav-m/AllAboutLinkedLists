@@ -198,6 +198,38 @@ class LinkedList
 
     }
 
+    /*Recursively print reverse of a list
+    * Time complexity O(n) , O(n) Recursive stack space needed*/
+    public void printRevList(Node curNode)
+    {
+        if(curNode.next==null)
+        {
+            System.out.print(curNode.getInfo()+"->");
+            return ;
+        }
+        else
+            printRevList(curNode.next);
+        System.out.print(curNode.getInfo()+"->");
+        return;
+
+
+   }
+
+   /*Above function can also be done in a tiny different way.
+   * Removes an extra print statement. ^.^
+   * Time complexity O(n) , O(n) Recursive stack space needed*/
+   public void printRevList2(Node curNode)
+   {
+       if(curNode==null) {
+           System.out.println();
+           return;
+       }
+       printRevList2(curNode.next);
+       System.out.print(curNode.getInfo()+"->");
+
+   }
+
+
 
     /*PROBLEM STATEMENT:
     Find the middle of the linked list in O(n) time.
@@ -244,7 +276,8 @@ class LinkedList
 
     /*PROBLEM STATEMENT:
     Find out whether the given linked list has even number of elements or
-    odd number of elements.
+    odd number of elements.\
+    Time complexity O(n/2) for traversing till the end approx O(n)
      */
     public boolean isListEven()
     {
@@ -289,7 +322,8 @@ class LinkedList
         start = prevNode;
     }
     /*PROBLEM STATEMENT:
-    Reverse the  linked list recursively TBD.
+    Reverse the  linked list recursively.
+    Time complexity (O(n) )
     */
     public Node recursiveReverse(Node curNode)
     {
@@ -305,6 +339,49 @@ class LinkedList
         return newHead;
 
     }
+
+/*PROBLEM STATEMENT: Reverse linked list in pairs of two.
+Time complexity : O(n) Space complexity: O(1)
+Not the most intuitive solution, work on this more, still a solution nonetheless.
+ */
+    public void reverseInPairsIter(Node curNode){
+
+        Node prevNode  = null;
+        while(curNode.next!=null)
+        {
+
+            //Swapping nodes in pairs
+          Node nextNode = curNode.next;
+          curNode.next = nextNode.next;
+            nextNode.next = curNode;
+
+
+
+            if(curNode==start) {
+                start = nextNode;
+
+            }
+            else
+                prevNode.next =nextNode;
+
+
+             prevNode  = curNode;
+            //List is even sized and since our loop
+            //terminates on checking the 'next' node,
+            //this will cause null pointer since null->next is invalid.
+            //in this case just move one pointer ahead through nextNode.
+            if(curNode.next == null)
+                curNode = nextNode.next;
+            else
+                curNode = curNode.next;
+
+
+
+        }
+
+    }
+
+
     /*PROBLEM STATEMENT:
     In a singly linked list, print out the nth node from the end.
     Time complexity O(n) (One scan)
@@ -336,7 +413,83 @@ class LinkedList
         }
         return nthNode.info;
     }
+/*PROBLEM STATEMENT  : Given two sorted linked lists, merge them together in a 3rd list in a sorted manner.
+Time complexity O(m+n) m and n being lengths of the two sorted lists.
+ */
+    public static void mergeTwoSortedLists(Node firstHead,Node secondHead) {
+        LinkedList sortedList = new LinkedList();
+        while (firstHead != null && secondHead != null) {
+            if (firstHead.info <= secondHead.info) {
+                sortedList.add(firstHead.info);
+                firstHead = firstHead.next;
+            } else {
+                sortedList.add(secondHead.info);
+                secondHead = secondHead.next;
+            }
+        }
+
+        if (firstHead == null)
+            while (secondHead != null) {
+                sortedList.add(secondHead.info);
+                secondHead = secondHead.next;
+            }
+        else
+            while (firstHead != null) {
+                sortedList.add(firstHead.info);
+                firstHead = secondHead.next;
+            }
+
+            sortedList.printList();
+    }
+
+    /*PROBLEM STATEMENT: Find first modular node from the end, modular node is defined as n%k = 0
+    for some k where n or length of the list is unknown.
+    Once understood clearly, the problem is the same as the nth node from last and can be done in a similar fashion.
+    The approach used here is more intuitive than the one used in nth node problem(no successive addition)
+    Time complexity : O(n)
+     */
+    public int firstModularNodeFromEnd(int k)
+    {
+        Node curNode = start;
+        Node modularNode = start;
+        //Move curNode k steps ahead (so that the modular node and curNode difference is always k steps)
+        for(int i =0;i<k&&curNode.next!=null;i++)
+        curNode = curNode.next;
+        //Now the current node travels till it reaches the end of the list while the modular node lags behind 'k steps'
+        while(curNode.next!=null)
+        {
+            curNode= curNode.next;
+            modularNode = modularNode.next;
+        }
+        return modularNode.getInfo();
+    }
+
+    /*PROBLEM STATEMENT: Find last modular node from the beginning, modular node is defined as n%k = 0
+    for some k where n or length of the list is unknown.
+   This is a variation of the above problem.
+     */
+    public int lastModularNodeFromBeg(int k)
+    {
+        Node curNode = start;
+        if(start == null)
+            return 0;
+        Node modularNode = new Node();
+        int i;
+        //Let the computer do the math.
+        //i%k will evaluate to true after i becomes multiples of k and the loop runs till we reach the end
+        //of the list therefore we find the last modular node from beginning.
+        for( i= 1;curNode.next!=null;curNode = curNode.next,i++)
+            if(i%k==0)
+                modularNode = curNode;
+        if(i<k)
+            return(0);
+        else
+        return modularNode.info;
+
+        }
+
 }
+
 
 
 public class SinglyLinkedList {
@@ -345,6 +498,18 @@ public class SinglyLinkedList {
 
     public static void main(String[] args) {
         LinkedList list = new LinkedList();
+        LinkedList testList = new LinkedList();
+        for(int i=1;i<=19;i++)
+            testList.add(i);
+        System.out.println("k=3,n=19,firstModNode from end="+testList.firstModularNodeFromEnd(3));
+        System.out.println("k=3,n=19,lastModNode from beg="+testList.lastModularNodeFromBeg(3));
+        LinkedList sortedList1 = new LinkedList();
+        for(int i=1;i<=5;i++)
+            sortedList1.add(i);
+        LinkedList sortedList2 = new LinkedList();
+        for(int i=2;i<=7;i++)
+            sortedList2.add(i);
+        LinkedList.mergeTwoSortedLists(sortedList1.start,sortedList2.start);
         list.add(1);
         list.add(2);
         list.add(3);
@@ -357,6 +522,9 @@ public class SinglyLinkedList {
         list.printList();
         list.add(6);
         list.add(7);
+        list.add(8);
+        list.add(9);
+        list.add(10);
         list.printList();
         list.isListEven();
         list.reverseListIter();
@@ -367,6 +535,13 @@ public class SinglyLinkedList {
         System.out.print("\nSecond reversal");
         list.printList();
         System.out.println("Data at middle ="+list.middleOfList());
+        list.printRevList(list.start);
+        list.printList();
+        list.reverseInPairsIter(list.start);
+        System.out.println("After reversing in pairs") ;
+        list.printList();
+        list.printRevList2(list.start);
+
 
     }
 }
