@@ -1,6 +1,4 @@
 
-
-
 class Node
 {
   protected   Node next;
@@ -198,7 +196,7 @@ class LinkedList
 
     }
 
-    /*Recursively print reverse of a list
+    /*1)Recursively print reverse of a list
     * Time complexity O(n) , O(n) Recursive stack space needed*/
     public void printRevList(Node curNode)
     {
@@ -215,7 +213,7 @@ class LinkedList
 
    }
 
-   /*Above function can also be done in a tiny different way.
+   /*2)Above function can also be done in a tiny different way.
    * Removes an extra print statement. ^.^
    * Time complexity O(n) , O(n) Recursive stack space needed*/
    public void printRevList2(Node curNode)
@@ -231,7 +229,7 @@ class LinkedList
 
 
 
-    /*PROBLEM STATEMENT:
+    /*3)PROBLEM STATEMENT:
     Find the middle of the linked list in O(n) time.
     The solution to the problem is relatively simple.
     If we apply brute force method, the problem can be solved in O(m)+O(n) m=n/2
@@ -274,7 +272,7 @@ class LinkedList
 
     }
 
-    /*PROBLEM STATEMENT:
+    /*4)PROBLEM STATEMENT:
     Find out whether the given linked list has even number of elements or
     odd number of elements.\
     Time complexity O(n/2) for traversing till the end approx O(n)
@@ -294,7 +292,7 @@ class LinkedList
         }
     }
 
-    /*PROBLEM STATEMENT:
+    /*5)PROBLEM STATEMENT:
     Reverse the  linked list iteratively.
     This one requires 3 nodes to solve the problem ie, the current node the next node and the previous node.
     Current node is initialised to start node in the beginning, previous node is null( as the list is being reversed)
@@ -321,7 +319,7 @@ class LinkedList
         }
         start = prevNode;
     }
-    /*PROBLEM STATEMENT:
+    /*6)PROBLEM STATEMENT:
     Reverse the  linked list recursively.
     Time complexity (O(n) )
     */
@@ -340,7 +338,7 @@ class LinkedList
 
     }
 
-/*PROBLEM STATEMENT: Reverse linked list in pairs of two.
+/*7)PROBLEM STATEMENT: Reverse linked list in pairs of two.
 Time complexity : O(n) Space complexity: O(1)
 Not the most intuitive solution, work on this more, still a solution nonetheless.
  */
@@ -382,7 +380,7 @@ Not the most intuitive solution, work on this more, still a solution nonetheless
     }
 
 
-    /*PROBLEM STATEMENT:
+    /*8)PROBLEM STATEMENT:
     In a singly linked list, print out the nth node from the end.
     Time complexity O(n) (One scan)
      */
@@ -413,7 +411,7 @@ Not the most intuitive solution, work on this more, still a solution nonetheless
         }
         return nthNode.info;
     }
-/*PROBLEM STATEMENT  : Given two sorted linked lists, merge them together in a 3rd list in a sorted manner.
+/*9)PROBLEM STATEMENT  : Given two sorted linked lists, merge them together in a 3rd list in a sorted manner.
 Time complexity O(m+n) m and n being lengths of the two sorted lists.
  */
     public static void mergeTwoSortedLists(Node firstHead,Node secondHead) {
@@ -442,7 +440,7 @@ Time complexity O(m+n) m and n being lengths of the two sorted lists.
             sortedList.printList();
     }
 
-    /*PROBLEM STATEMENT: Find first modular node from the end, modular node is defined as n%k = 0
+    /*10)PROBLEM STATEMENT: Find first modular node from the end, modular node is defined as n%k = 0
     for some k where n or length of the list is unknown.
     Once understood clearly, the problem is the same as the nth node from last and can be done in a similar fashion.
     The approach used here is more intuitive than the one used in nth node problem(no successive addition)
@@ -464,7 +462,7 @@ Time complexity O(m+n) m and n being lengths of the two sorted lists.
         return modularNode.getInfo();
     }
 
-    /*PROBLEM STATEMENT: Find last modular node from the beginning, modular node is defined as n%k = 0
+    /*11)PROBLEM STATEMENT: Find last modular node from the beginning, modular node is defined as n%k = 0
     for some k where n or length of the list is unknown.
    This is a variation of the above problem.
      */
@@ -488,7 +486,105 @@ Time complexity O(m+n) m and n being lengths of the two sorted lists.
 
         }
 
+/*12)PROBLEM STATEMENT: Given two linked lists with each node as a single digit integer number,
+add the two linked lists and save the output in third list.
+My approach converts both the linked lists into a number, adds the numbers and converts the given number back to a linked list.
+Time complexity: For converting each of the linked lists to a number, O(n) + o(m)  n>=m or m>n plus convertint the number back
+to a linked list which is O(n+1) or O(m+1) in worst case. Total time complexity : O(n)
+NOTE: This can be done recursively. Look for more solutions.
+ */
+    public static LinkedList addLists(LinkedList list1,LinkedList list2)
+    {
+        long firstList,secondList;
+        System.out.println("\nFirst and second list:");
+        list1.printList();
+        list2.printList();
+        firstList = convertListtoNum(list1);
+        secondList = convertListtoNum(list2);
+        long thirdlist = firstList+secondList;
+        System.out.println("\nThird list:");
+        LinkedList thirdList = convertNumtoList(thirdlist);
+        thirdList.printList();
+        return thirdList;
+
+    }
+//Driver function for above problem
+    public static long convertListtoNum(LinkedList list)
+    {
+        long num =0;
+        Node curNode = list.start;
+        while(curNode!=null)
+        {
+            num = num*10+curNode.info;
+            curNode = curNode.next;
+
+        }
+        return num;
+    }
+//Driver function for above problem
+    public static LinkedList convertNumtoList(long num)
+    {
+        long rem;
+        LinkedList thirdList = new LinkedList();
+        while(num>0)
+        {
+            rem = num%10;
+            thirdList.add((int)rem,1);
+            num = num/10;
+        }
+        return thirdList;
+    }
+
+/*13) Reverse the nodes of a linked list recursively,
+in pairs. This is the recursive solution problem number 7.
+ Time complexity(O(n) with O(n/2) recursive stack space)
+ NOTE: I SPENT A LOT OF TIME DEBUGGING THIS PROBLEM BY CALLING ANOTHER FUNCTION RECURSIVELY
+ INSTEAD OF THIS ONE NAME YOUR FUNCTIONS CORRECTLY.*/
+    public Node recursiveReverseInPairs(Node curNode)
+    {
+        if(curNode==null||curNode.next==null)
+            return null;
+        Node tempNode = curNode.next;
+        curNode.next = tempNode.next;
+        tempNode.next = curNode;
+        if(curNode==start)
+        start = tempNode;
+        Node newNextNode = recursiveReverseInPairs(curNode.next);
+        if(newNextNode==null)
+            return tempNode;
+        else
+        {
+            curNode.next = newNextNode;
+            return tempNode;
+        }
+
+    }
+
+/*PROBLEM STATEMENT: Find √nth node in a linked list , given size of linked list is unknown
+* Time complexity is O(n) to scan the list, this required me to use the sqrt function, maybe
+* there's a solution without using this?*/
+ public Node rootNthNode(Node curNode)
+ {
+     int counter = 1,rootN =1;
+     if(curNode==null)
+         return curNode;
+     Node rootNthNode = curNode;
+     while(curNode!=null)
+     {
+         if(rootN<(int)Math.sqrt(counter)) {
+             rootNthNode = rootNthNode.next;
+             rootN++;
+         }
+
+             curNode = curNode.next;
+
+         counter++;
+
+     }
+     return rootNthNode;
+ }
 }
+
 
 
 
@@ -499,6 +595,18 @@ public class SinglyLinkedList {
     public static void main(String[] args) {
         LinkedList list = new LinkedList();
         LinkedList testList = new LinkedList();
+
+        LinkedList list1 = new LinkedList();
+        LinkedList list2 = new LinkedList();
+
+        for(int i = 1 ;i<=5;i++)
+        {
+            list1.add(i);
+            list2.add(i);
+        }
+
+        LinkedList.addLists(list1,list2);
+
         for(int i=1;i<=19;i++)
             testList.add(i);
         System.out.println("k=3,n=19,firstModNode from end="+testList.firstModularNodeFromEnd(3));
@@ -510,34 +618,12 @@ public class SinglyLinkedList {
         for(int i=2;i<=7;i++)
             sortedList2.add(i);
         LinkedList.mergeTwoSortedLists(sortedList1.start,sortedList2.start);
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(5);
+        for(int i=1;i<=10;i++)
+            list.add(i);
         list.printList();
-        list.add(4,4);
-        list.add(6,6);
-        list.printList();
-        list.delete();
-        list.printList();
-        list.add(6);
-        list.add(7);
-        list.add(8);
-        list.add(9);
-        list.add(10);
-        list.printList();
-        list.isListEven();
-        list.reverseListIter();
-        System.out.print("\nFirst reversal");
-        list.printList();
-        System.out.println("3rd node from the end is"+list.nthNodeFromEnd(3));
-        list.start = list.recursiveReverse(list.start);
-        System.out.print("\nSecond reversal");
-        list.printList();
-        System.out.println("Data at middle ="+list.middleOfList());
-        list.printRevList(list.start);
-        list.printList();
-        list.reverseInPairsIter(list.start);
+        Node testNode = list.rootNthNode(list.start);
+        System.out.println("Root nth node = "+testNode.info);
+        list.recursiveReverseInPairs(list.start);
         System.out.println("After reversing in pairs") ;
         list.printList();
         list.printRevList2(list.start);
